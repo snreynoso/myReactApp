@@ -1,44 +1,48 @@
 import React, { useState } from 'react';
-import { FormControl, FormHelperText, OutlinedInput, InputLabel } from '@material-ui/core';
+import { FormControl, FormHelperText, Box, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles(theme => ({
+    searchBox: {
+        padding: theme.spacing(1),
+        backgroundColor: "#eeeeee",
+        borderRadius: "0.5rem",
+        width: '100%',
+        boxShadow: '0 3px 5px 2px #616161',
+    },
+}));
+
 const SearchBar = props => {
-    // Hooks //
     const [term, setTerm] = useState([]);
 
-    // Event Handler Functions //
     const handleChange = event => {
         setTerm(event.target.value);
     };
 
     const handleSubmit = event => {
         event.preventDefault();
-        props.onFormSubmit(setTerm(term));
+        props.onFormSubmit(term);
     };
-
-    // Material UI Style //
-    const useStyles = makeStyles(theme => ({
-        root: {
-            '& > *': {
-                margin: theme.spacing(1),
-            },
-        },
-    }));
 
     const classes = useStyles(props);
 
     return (
-        <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <FormControl variant="outlined">
-                <InputLabel htmlFor='img-search'>Image Search</InputLabel>
-                <OutlinedInput
-                    id='img-search'
-                    value={term}
-                    onChange={handleChange}
-                    label="Image Search" />
-                <FormHelperText id='img-search-helper-text' >I have {props.numVideos} videos</FormHelperText>
-            </FormControl>
-        </form>
+        <Box className={classes.searchBox}>
+            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                <FormControl fullWidth='true' variant="outlined">
+                    <TextField
+                        variant="outlined"
+                        color="secondary"
+                        id='img-search'
+                        value={term}
+                        onChange={handleChange}
+                        label="Image Search"
+                        inputProps={{ style: { borderColor: 'green !important', } }}
+                    />
+                    <FormHelperText id='img-search-helper-text' >I have {props.numVideos} videos</FormHelperText>
+                </FormControl>
+            </form>
+        </Box>
     );
 }
 
