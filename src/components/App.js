@@ -75,6 +75,7 @@ const useStyles = makeStyles(theme => ({
     button: {
         background: 'linear-gradient(45deg, #8c9eff 30%, #1de9b6 90%)',
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        margin: '0 0 0 1rem'
     }
 }));
 
@@ -91,6 +92,7 @@ export default function App() {
                     q: term
                 }
             });
+
             setVideos(response.data.items);
             setSelectedVideo(response.data.items[0]);
         } catch (error) {
@@ -103,8 +105,14 @@ export default function App() {
     };
 
     useEffect(() => {
-        (async () => { await onFormSubmit('hola'); })();
-    });
+        (async () => {
+            await youtube.get('/search', {
+                params: {
+                    q: 'hola'
+                }
+            });
+        })();
+    }, []); // Empty [] to call it just once
 
     return (
         <ThemeProvider theme={light ? themeLight : themeDark}>
@@ -135,7 +143,7 @@ export default function App() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Button onClick={() => setLight((prev) => !prev)} className={classes.button}>Toggle Theme</Button>
+            <Button onClick={() => setLight((prev) => !prev)} className={classes.button} ml={2}>Toggle Theme</Button>
         </ThemeProvider>
     );
 }
