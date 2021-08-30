@@ -13,46 +13,20 @@ import AppBar from '@material-ui/core/AppBar';
 
 const themeLight = createTheme({
     palette: {
-        primary: {
-            light: '#757ce8',
-            main: '#4354b5',//'#3f50b5',
-            dark: '#a83232',//'#002884',
-            contrastText: '#fff',
-        },
-        background: {
-            default: "#d6ddff"
-        },
         secondary: {
-            light: '#757ce8',
             main: '#757ce8',
-            dark: '#ba000d',
-            //contrastText: '#000',
         },
-        input: {
-            color: '#ff1100'
-        }
     }
 });
 
 const themeDark = createTheme({
     palette: {
+        type: 'dark',
         primary: {
-            light: '#757ce8',
-            main: '#566096',//'#3f50b5',
-            dark: '#a83232',//'#002884',
-            contrastText: '#fff',
+            main: '#A9A9A9'
         },
         secondary: {
-            light: '#757ce8',
-            main: '#757ce8',
-            dark: '#ba000d',
-            contrastText: '#ff0000',
-        },
-        background: {
-            default: "#424141"
-        },
-        text: {
-            //primary: "#ffffff"
+            main: '#CACACA',
         },
     }
 });
@@ -79,11 +53,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function App() {
-    const [light, setLight] = React.useState(true);
+const App = () => {
     const [videos, setVideos] = useState([]);
     const [selectedVideo, setSelectedVideo] = useState(null);
+    const [light, setLight] = React.useState(true);
     const classes = useStyles();
+
+    useEffect(() => {
+        onFormSubmit('Hello');
+    }, []); // Empty [] to call it just once
 
     const onFormSubmit = async term => {
         try {
@@ -99,20 +77,6 @@ export default function App() {
             console.log(error);
         }
     };
-
-    const onVideoSelect = video => {
-        setSelectedVideo(video);
-    };
-
-    useEffect(() => {
-        (async () => {
-            await youtube.get('/search', {
-                params: {
-                    q: 'hola'
-                }
-            });
-        })();
-    }, []); // Empty [] to call it just once
 
     return (
         <ThemeProvider theme={light ? themeLight : themeDark}>
@@ -139,7 +103,10 @@ export default function App() {
                 </Grid>
                 <Grid item sm={4}>
                     <Grid container justifyContent="center" >
-                        <VideoList onVideoSelect={onVideoSelect} videos={videos} />
+                        <VideoList
+                            onVideoSelect={setSelectedVideo} // video => setSelectedVideo(video)
+                            videos={videos}
+                        />
                     </Grid>
                 </Grid>
             </Grid>
@@ -147,3 +114,5 @@ export default function App() {
         </ThemeProvider>
     );
 }
+
+export default App;
